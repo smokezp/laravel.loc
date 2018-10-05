@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Create Product</div>
+                    <div class="card-header">{{isset($product) ? 'Edit' : 'Create' }} product</div>
 
                     <div class="card-body">
                         <div class="form-group row">
@@ -13,7 +13,7 @@
 
                             <div class="col-md-6">
                                 <form
-                                    action="@if(isset($product)){{route('product.update', $product->id)}}@else {{route('product.store')}} @endif"
+                                    action="{{isset($product) ? route('product.update', $product->id):route('product.store')}}"
                                     method="POST">
                                     @csrf
                                     @if(isset($product))
@@ -35,7 +35,7 @@
 
 
                                     <input type="submit" class="btn btn-primary float-right mt-2"
-                                           value="@if(isset($product)) {{ __('Update') }} @else {{ __('Store') }} @endif">
+                                           value="{{ isset($product) ? __('Update') : __('Store') }}">
                                 </form>
                             </div>
                         </div>
