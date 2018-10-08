@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Api;
 use App\Product;
 use Illuminate\Http\Request;
 
-class ProductController
+class ProductController extends ApiController
 {
     public function index()
     {
         $products = Product::all();
-        return view('product.index', compact('products'));
+        $products = $products->toArray();
+        return $this->success(compact('products'), 'Your products has been returned');
     }
 
     public function create()
@@ -40,6 +41,7 @@ class ProductController
 
     public function destroy($id)
     {
+        dd($id);
         Product::find($id)->delete();
         return redirect()->route('product.index');
     }
