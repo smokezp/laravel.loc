@@ -21,7 +21,9 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        Product::create($request->all());
+        $array = $request->all();
+        $array['user_id'] = auth()->user()->id;
+        Product::create($array);
         return redirect()->route('product.index');
     }
 
@@ -39,8 +41,12 @@ class ProductController extends Controller
 
     public function destroy($id)
     {
-
         Product::find($id)->delete();
         return redirect()->route('product.index');
+    }
+
+    public function show()
+    {
+        abort(404);
     }
 }
