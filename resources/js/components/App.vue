@@ -1,19 +1,90 @@
 <template>
     <div>
-        <p>
-            <router-link :to="{ name: 'product' }">Products</router-link>
-        </p>
+        <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
+            <div class="container">
+                <a class="navbar-brand" href="/">
+                    Home
+                </a>
+                <button class="navbar-toggler" type="button">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <!-- Left Side Of Navbar -->
+                    <ul class="navbar-nav mr-auto">
+
+                    </ul>
+
+                    <!-- Right Side Of Navbar -->
+                    <ul class="navbar-nav ml-auto">
+                        <!-- Authentication Links -->
+                        <!--@guest-->
+                        <li class="nav-item">
+                            <button @click="showLoginModal = true" v-if="!logged">Login</button>
+                            <button @click="showRegisterModal = true" v-if="!logged">Register</button>
+                            <button @click="logout" v-if="logged">Logout</button>
+                            <!--<router-link :to="{ name: 'login' }" >Login</router-link>-->
+                            <!--<router-link :to="{ name: 'register' }">Register</router-link>-->
+                        </li>
+
+                        <!--<li class="nav-item">-->
+                        <!--@if (Route::has('register'))-->
+                        <!--<a class="nav-link" href="">Register</a>-->
+                        <!--@endif-->
+                        <!--</li>-->
+                        <!--@else-->
+                        <!--<li class="nav-item dropdown">-->
+                        <!--<a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>-->
+                        <!--{{ Auth::user()->name }} <span class="caret"></span>-->
+                        <!--</a>-->
+
+                        <!--<div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">-->
+                        <!--<a class="dropdown-item" href="{{ route('logout') }}"-->
+                        <!--onclick="event.preventDefault();-->
+                        <!--document.getElementById('logout-form').submit();">-->
+                        <!--{{ __('Logout') }}-->
+                        <!--</a>-->
+
+                        <!--<form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">-->
+                        <!--@csrf-->
+                        <!--</form>-->
+                        <!--</div>-->
+                        <!--</li>-->
+                        <!--@endguest-->
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
         <div class="container">
             <router-view></router-view>
         </div>
+        <login v-if="showLoginModal" @close="showLoginModal = false"></login>
+        <register v-if="showRegisterModal" @close="showRegisterModal = false"></register>
     </div>
+
 </template>
 
 <script>
+    import Login from "./Login";
+    import Register from "./Register";
+
     export default {
-        mounted() {
-            console.log('Component mounted.')
+
+        data: () => {
+            return {
+                showLoginModal: false,
+                showRegisterModal: false,
+                logged: localStorage.getItem('user') === null ? false : true
+            }
+        },
+        name: "App",
+        components: {Register, Login},
+        methods: {
+            logout() {
+                localStorage.removeItem('user');
+                this.logged = false;
+            }
         }
     }
 </script>
