@@ -62,9 +62,6 @@
                 </div>
 
             </div>
-            <div class="card" v-if="newState === 'edit'">
-
-            </div>
         </div>
     </div>
 </template>
