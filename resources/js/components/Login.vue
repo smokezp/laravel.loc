@@ -104,15 +104,16 @@
                         password: this.password,
                     })
                     .then(response => {
+                        let logged;
                         if (response.status === 200) {
-                            localStorage.setItem('user', JSON.stringify(response.data.user));
+                            localStorage.setItem('user', JSON.stringify(response.data.data.user[0]));
                             this.$emit('close');
-
+                            logged = true;
                         } else {
-
+                            logged = false;
                         }
+                        this.$root.$emit('logged', logged)
                     });
-
             }
         },
         directives: {

@@ -19,10 +19,10 @@ class ApiController
     private function compact($code, $data, $msg)
     {
         if (!$data) $data = [];
+
         return response()->json([
-            'status' => $code,
             'data' => $data,
             'message' => $msg
-        ]);
+        ], $code);
     }
 }

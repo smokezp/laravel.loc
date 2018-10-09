@@ -2,9 +2,8 @@
     <div>
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
-                <a class="navbar-brand" href="/">
-                    Home
-                </a>
+                <router-link to="/" class="navbar-brand">Home</router-link>
+                <router-link :to="{ name: 'product' }" class="navbar-brand">Product</router-link>
                 <button class="navbar-toggler" type="button">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -19,6 +18,13 @@
                     <ul class="navbar-nav ml-auto">
                         <!-- Authentication Links -->
                         <!--@guest-->
+
+                        <li class="nav-item" v-if="user">
+                            <span class="p-3">
+                                {{user.name}}
+                            </span>
+                        </li>
+
                         <li class="nav-item">
                             <button @click="showLoginModal = true" v-if="!logged">Login</button>
                             <button @click="showRegisterModal = true" v-if="!logged">Register</button>
@@ -70,20 +76,31 @@
     import Register from "./Register";
 
     export default {
-
         data: () => {
+            let user = this.default.methods.getUser();
             return {
                 showLoginModal: false,
                 showRegisterModal: false,
-                logged: localStorage.getItem('user') === null ? false : true
+                user: user,
+                logged: user === null ? false : true
             }
         },
         name: "App",
         components: {Register, Login},
+        created() {
+            this.$root.$on('logged', (logged) => {
+                this.logged = logged;
+                this.user = this.getUser();
+            })
+        },
         methods: {
             logout() {
                 localStorage.removeItem('user');
                 this.logged = false;
+                this.user = null;
+            },
+            getUser() {
+                return JSON.parse(localStorage.getItem('user'));
             }
         }
     }
