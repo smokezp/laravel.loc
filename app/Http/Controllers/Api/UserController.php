@@ -18,7 +18,7 @@ class UserController extends ApiController
         ])->validate();
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $user = User::where('email', $request->email)->get()->toArray();
+            $user = User::where('email', $request->email)->first()->toArray();
             return $this->success(compact('user'), 'You are logined');
         } else {
             return $this->error('', 'You are not logined');

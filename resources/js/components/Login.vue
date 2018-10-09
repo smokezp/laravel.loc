@@ -37,16 +37,16 @@
                                         </div>
 
                                         <!--<div class="form-group row">-->
-                                            <!--<div class="col-md-6 offset-md-4">-->
-                                                <!--<div class="form-check">-->
-                                                    <!--<input class="form-check-input" type="checkbox"-->
-                                                           <!--name="remember" id="remember">-->
+                                        <!--<div class="col-md-6 offset-md-4">-->
+                                        <!--<div class="form-check">-->
+                                        <!--<input class="form-check-input" type="checkbox"-->
+                                        <!--name="remember" id="remember">-->
 
-                                                    <!--<label class="form-check-label" for="remember">-->
-                                                        <!--Remember Me-->
-                                                    <!--</label>-->
-                                                <!--</div>-->
-                                            <!--</div>-->
+                                        <!--<label class="form-check-label" for="remember">-->
+                                        <!--Remember Me-->
+                                        <!--</label>-->
+                                        <!--</div>-->
+                                        <!--</div>-->
                                         <!--</div>-->
 
                                         <div class="form-group row mb-0">
@@ -56,7 +56,7 @@
                                                 </button>
 
                                                 <!--<a class="btn btn-link" href="">-->
-                                                    <!--Forgot Your Password?-->
+                                                <!--Forgot Your Password?-->
                                                 <!--</a>-->
                                             </div>
                                         </div>
@@ -82,7 +82,8 @@
 
 <script>
     import ClickOutside from 'vue-click-outside'
-    import axios from 'axios';
+    import User from '../services/User';
+    import Http from '../services/Http';
 
     export default {
         name: "Login",
@@ -98,22 +99,20 @@
                 this.$emit('close');
             },
             submit() {
-                axios
-                    .post('/api/login', {
-                        email: this.email,
-                        password: this.password,
-                    })
-                    .then(response => {
-                        let logged;
-                        if (response.status === 200) {
-                            localStorage.setItem('user', JSON.stringify(response.data.data.user[0]));
-                            this.$emit('close');
-                            logged = true;
-                        } else {
-                            logged = false;
-                        }
-                        this.$root.$emit('logged', logged)
-                    });
+                Http.post('login', {
+                    email: this.email,
+                    password: this.password,
+                }).then(response => {
+                    let logged;
+                    if (response.status === 200) {
+                        User.setUser(response.data.data.user);
+                        this.$emit('close');
+                        logged = true;
+                    } else {
+                        logged = false;
+                    }
+                    this.$root.$emit('logged', logged)
+                });
             }
         },
         directives: {

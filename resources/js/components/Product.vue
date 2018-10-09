@@ -1,7 +1,7 @@
 <template>
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card" v-if="newState === 'table'">
                 <div class="card-header">All products</div>
                 <table v-if="products">
                     <thead>
@@ -19,7 +19,7 @@
                         <td>{{product.name}}</td>
                         <td>{{product.size}}</td>
                         <td>
-                            <input type="submit" class="btn btn-primary" value="Edit">
+                            <input type="submit" class="btn btn-primary" value="Edit" @click="edit(product.id)">
                         </td>
                         <td>
                             <input type="submit" class="btn btn-danger" @click="destroy(product.id)" value="Delete">
@@ -28,55 +28,120 @@
                     </tbody>
                 </table>
                 <div class="card-body">
-                    <input type="submit" class="btn btn-primary" value="Create">
+                    <input type="submit" class="btn btn-primary" value="Create" @click="create">
                 </div>
+            </div>
+            <div class="card" v-if="newState !== 'table'">
+                <div class="card-header" v-if="newState === 'create'">Create product</div>
+                <div class="card-header" v-if="newState === 'edit'">Edit product</div>
+                <div class="card-body">
+                    <div class="form-group row justify-content-center">
+                        <div class="col-md-8">
+                            <label for="name"
+                                   class="col-sm-4 col-form-label text-md-right">Name</label>
+                            <input type="text"
+                                   class="form-control"
+                                   v-model="name" id="name">
+
+                            <label for="number"
+                                   class="col-sm-4 col-form-label text-md-right">Size</label>
+                            <input type="number"
+                                   class="form-control"
+                                   v-model="size" id="number">
+
+
+                            <input type="submit" class="btn btn-primary float-left mt-2"
+                                   value="Store" @click="store" v-if="newState === 'create'">
+                            <input type="submit" class="btn btn-primary float-left mt-2"
+                                   value="Update" @click="update" v-if="newState === 'edit'">
+                            <input type="submit" class="btn btn-light float-right mt-2"
+                                   value="Cancel" @click="cancel">
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="card" v-if="newState === 'edit'">
+
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import axios from 'axios';
+    import User from '../services/User';
+    import Http from '../services/Http';
 
     export default {
         name: "Product",
         data: () => {
             return {
                 products: null,
+                newState: 'table',
+                oldState: 'table',
+                name: '',
+                size: null,
+
             }
         },
         created() {
-            axios
-                .get('/api/product')
+            Http.get('products')
                 .then(response => {
                     if (response.status === 200) {
                         this.products = response.data.data.products;
-                    } else {
-
                     }
                 });
-
         },
-
-        mounted() {
-
+        watch: {
+            newState: (newVal, oldVal) => {
+                this.oldState = oldVal;
+            }
         },
         methods: {
-            destroy(id) {debugger
-                axios
-                    .delete('/api/product', {id:id})
-                    .then(response => {debugger
-
-                        if (response.status === 200) {
-                            this.products = response.data.data.products;
-                        } else {
-
-                        }
-                    });
+            destroy(id) {
+                Http.delete('products/' + id).then(response => {
+                    if (response.status === 200) {
+                        this.products.splice(this.findKeyById(id), 1);
+                    }
+                });
+            },
+            create() {
+                this.newState = 'create';
+            },
+            edit(id) {
+                let product = this.products[this.findKeyById(id)];
+                this.name = product.name;
+                this.size = product.size;
+                this.newState = 'edit';
+            },
+            update(id) {
+                Http.put().then(response => {
+                    if (response.status === 200) {
+                        // this.products.push(response.data.data.product);
+                        // this.newState = 'table';
+                    }
+                });
+            },
+            cancel() {
+                this.newState = this.oldState;
+            },
+            store() {
+                let id = User.getUser().id;
+                Http.post('users/' + id + '/products', {
+                    name: this.name,
+                    size: this.size
+                }).then(response => {
+                    if (response.status === 200) {
+                        this.products.push(response.data.data.product);
+                        this.newState = 'table';
+                    }
+                });
+            },
+            findKeyById(id) {
+                return this.products.map(item => item.id).indexOf(id);
             }
         }
-
-
     }
 </script>
 

@@ -14,36 +14,25 @@ class ProductController extends ApiController
         return $this->success(compact('products'), 'Your products has been returned');
     }
 
-    public function create()
-    {
-        return view('product.create');
-    }
-
-    public function store(Request $request)
+    public function store(Request $request, $user_id)
     {
         $array = $request->all();
-        $array['user_id'] = auth()->user()->id;
-        Product::create($array);
-        return redirect()->route('product.index');
-    }
-
-    public function edit($id)
-    {
-        $product = Product::find($id);
-        return view('product.create', compact('product'));
+        $array['user_id'] = $user_id;
+        $product = Product::create($array);
+        return $this->success(compact('product'), 'Yor product has been returned');
     }
 
     public function update(Request $request, $id)
     {
+        dd($id);
         Product::find($id)->update($request->all());
         return redirect()->route('product.index');
     }
 
     public function destroy($id)
     {
-        dd($id);
         Product::find($id)->delete();
-        return redirect()->route('product.index');
+        return $this->success('', 'Your product has been deleted');
     }
 
 }

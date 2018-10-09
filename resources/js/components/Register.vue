@@ -88,7 +88,8 @@
 
 <script>
     import ClickOutside from 'vue-click-outside'
-    import axios from 'axios';
+    import User from '../services/User';
+    import Http from '../services/Http';
 
     export default {
         name: "Register",
@@ -106,25 +107,22 @@
                 this.$emit('close');
             },
             submit() {
-                axios
-                    .post('/api/register', {
-                        name: this.name,
-                        email: this.email,
-                        password: this.password,
-                    })
-                    .then(response => {
-                        let logged;
-                        if (response.status === 200) {
-                            localStorage.setItem('user', JSON.stringify(response.data.data.user[0]));
-                            this.$emit('close');
-                            logged = true;
-                        } else {
-                            logged = false;
-                        }
+                Http.post('register', {
+                    name: this.name,
+                    email: this.email,
+                    password: this.password
+                }).then(response => {
+                    let logged;
+                    if (response.status === 200) {
+                        User.setUser(response.data.data.user);
+                        this.$emit('close');
+                        logged = true;
+                    } else {
+                        logged = false;
+                    }
 
-                        this.$root.$emit('logged', logged)
-                    });
-
+                    this.$root.$emit('logged', logged)
+                });
             }
         },
         directives: {

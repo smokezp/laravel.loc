@@ -62,7 +62,7 @@
             </div>
         </nav>
 
-        <div class="container">
+        <div class="container" v-if="logged">
             <router-view></router-view>
         </div>
         <login v-if="showLoginModal" @close="showLoginModal = false"></login>
@@ -74,10 +74,11 @@
 <script>
     import Login from "./Login";
     import Register from "./Register";
+    import User from '../services/User';
 
     export default {
         data: () => {
-            let user = this.default.methods.getUser();
+            let user = User.getUser();
             return {
                 showLoginModal: false,
                 showRegisterModal: false,
@@ -90,7 +91,7 @@
         created() {
             this.$root.$on('logged', (logged) => {
                 this.logged = logged;
-                this.user = this.getUser();
+                this.user = User.getUser();
             })
         },
         methods: {
@@ -98,9 +99,6 @@
                 localStorage.removeItem('user');
                 this.logged = false;
                 this.user = null;
-            },
-            getUser() {
-                return JSON.parse(localStorage.getItem('user'));
             }
         }
     }
