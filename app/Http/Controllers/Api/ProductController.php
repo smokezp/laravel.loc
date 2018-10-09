@@ -24,9 +24,9 @@ class ProductController extends ApiController
 
     public function update(Request $request, $id)
     {
-        dd($id);
-        Product::find($id)->update($request->all());
-        return redirect()->route('product.index');
+        $product = Product::find($id);
+        $product->update($request->all());
+        return $this->success(compact('product'), 'Your product has been updated');
     }
 
     public function destroy($id)

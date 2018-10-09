@@ -80,6 +80,7 @@
                 products: null,
                 newState: 'table',
                 oldState: 'table',
+                editableProduct: null,
                 name: '',
                 size: null,
 
@@ -108,18 +109,24 @@
             },
             create() {
                 this.newState = 'create';
+                this.name = '';
+                this.size = null;
             },
             edit(id) {
-                let product = this.products[this.findKeyById(id)];
-                this.name = product.name;
-                this.size = product.size;
+                this.editableProduct = this.products[this.findKeyById(id)];
+                this.name = this.editableProduct.name;
+                this.size = this.editableProduct.size;
                 this.newState = 'edit';
             },
-            update(id) {
-                Http.put().then(response => {
+            update() {
+                let id = this.editableProduct.id;
+                Http.put('products/' + id, {
+                    name: this.name,
+                    size: this.size
+                }).then(response => {
                     if (response.status === 200) {
-                        // this.products.push(response.data.data.product);
-                        // this.newState = 'table';
+                        this.products[this.findKeyById(id)] = response.data.data.product;
+                        this.newState = 'table';
                     }
                 });
             },
