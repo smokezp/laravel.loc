@@ -3,6 +3,7 @@
         <div class="col-md-8">
             <div class="card" v-if="newState === 'table'">
                 <div class="card-header">All products</div>
+                <input type="text" v-model="query" @input="getProducts"/>
                 <table v-if="products">
                     <thead>
                     <tr>
@@ -80,7 +81,7 @@
                 editableProduct: null,
                 name: '',
                 size: null,
-
+                query: ''
             }
         },
         created() {
@@ -144,6 +145,14 @@
             },
             findKeyById(id) {
                 return this.products.map(item => item.id).indexOf(id);
+            },
+            getProducts() {
+                console.log(this.query);
+                Http.get('products/search?q=' + this.query).then(response => {
+                    if (response.status === 200) {
+                        console.log('222');
+                    }
+                });
             }
         }
     }
