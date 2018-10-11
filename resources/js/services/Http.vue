@@ -4,10 +4,14 @@
 
 <script>
     import axios from 'axios';
+    import User from './User';
 
     function request(url, data, method) {
         return new Promise((resolve, reject) => {
-            axios({url: '/api/' + url, data: data, method: method})
+
+            axios({url: '/api/' + url, data: data, method: method,  headers: {
+                    'Authorization': 'Bearer ' + User.getToken(),
+                },})
                 .then(resp => {
                     resolve(resp)
                 })

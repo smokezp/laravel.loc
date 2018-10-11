@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use JWTAuth;
 use Validator;
 
 class UserController extends ApiController
@@ -17,9 +17,9 @@ class UserController extends ApiController
             'password' => 'required'
         ])->validate();
 
-        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if ($token = JWTAuth::attempt(['email' => $request->email, 'password' => $request->password])) {
             $user = User::where('email', $request->email)->first()->toArray();
-            return $this->success(compact('user'), 'You are logined');
+            return $this->success(compact('user', 'token'), 'You are logined');
         } else {
             return $this->error('', 'You are not logined');
         }
@@ -38,6 +38,7 @@ class UserController extends ApiController
         if ($is_exist_user) {
             return $this->error('', 'This email already exist');
         } else {
+            $array['password'] = bcrypt($array['password']);
             $user = User::create($array);
             auth()->login($user);
             $user = $user->toArray();

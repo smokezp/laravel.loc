@@ -20,8 +20,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/login','Api\UserController@login');
 Route::post('/register','Api\UserController@register');
 
-Route::get('/products', 'Api\ProductController@index');
-Route::get('/products/search', 'Api\ProductController@search');
-Route::put('/products/{id}', 'Api\ProductController@update');
-Route::post('/users/{user_id}/products', 'Api\ProductController@store');
-Route::delete('/products/{id}', 'Api\ProductController@destroy');
+Route::group(['middleware' => 'jwt.auth'], function () {
+    Route::get('/products', 'Api\ProductController@index');
+    Route::get('/products/search', 'Api\ProductController@search');
+    Route::put('/products/{id}', 'Api\ProductController@update');
+    Route::post('/users/{user_id}/products', 'Api\ProductController@store');
+    Route::delete('/products/{id}', 'Api\ProductController@destroy');
+});
