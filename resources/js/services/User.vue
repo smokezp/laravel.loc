@@ -8,7 +8,7 @@
         getUser() {
             return JSON.parse(localStorage.getItem('user'));
         },
-        setUser(user, token) {
+        setUserData(user, token) {
             localStorage.setItem('token', JSON.stringify(token));
             localStorage.setItem('user', JSON.stringify(user));
         },

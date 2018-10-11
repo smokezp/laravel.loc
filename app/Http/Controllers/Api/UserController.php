@@ -17,7 +17,7 @@ class UserController extends ApiController
             'password' => 'required'
         ])->validate();
 
-        if ($token = JWTAuth::attempt(['email' => $request->email, 'password' => $request->password])) {
+        if ($token = $this->attempt($request->email, $request->password)) {
             $user = User::where('email', $request->email)->first()->toArray();
             return $this->success(compact('user', 'token'), 'You are logined');
         } else {
@@ -38,11 +38,16 @@ class UserController extends ApiController
         if ($is_exist_user) {
             return $this->error('', 'This email already exist');
         } else {
-            $array['password'] = bcrypt($array['password']);
-            $user = User::create($array);
-            auth()->login($user);
-            $user = $user->toArray();
-            return $this->success(compact('user'), 'You are registered');
+            $password = $array['password'];
+            $array['password'] = bcrypt($password);
+            $user = User::create($array)->toArray();
+            $token = $this->attempt($array['email'], $password);
+            return $this->success(compact('user', 'token'), 'You are registered');
         }
+    }
+
+    private function attempt($email, $password)
+    {
+        return JWTAuth::attempt(['email' => $email, 'password' => $password]);
     }
 }
