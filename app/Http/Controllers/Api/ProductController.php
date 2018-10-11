@@ -17,10 +17,10 @@ class ProductController extends ApiController
         return $this->success(compact('products'), 'Your products has been returned');
     }
 
-    public function store(Request $request, $user_id)
+    public function store(Request $request)
     {
         $array = $request->all();
-        $array['user_id'] = $user_id;
+        $array['user_id'] = auth()->id();
         $product = Product::create($array);
         $this->esPut($product);
 

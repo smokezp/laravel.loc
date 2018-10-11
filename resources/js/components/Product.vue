@@ -134,8 +134,7 @@
                 this.newState = this.oldState;
             },
             store() {
-                let id = User.getUser().id;
-                Http.post('users/' + id + '/products', {
+                Http.post('products', {
                     name: this.name,
                     size: this.size
                 }).then(response => {
