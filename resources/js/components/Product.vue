@@ -2,8 +2,10 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card" v-if="newState === 'table'">
-                <div class="card-header">All products</div>
-                <input type="text" v-model="query" @input="getProducts"/>
+                <div class="card-header">All products
+                    <input type="text" v-model="query" class="float-right" @input="getProducts"/>
+                </div>
+
                 <table v-if="products">
                     <thead>
                     <tr>
@@ -147,10 +149,9 @@
                 return this.products.map(item => item.id).indexOf(id);
             },
             getProducts() {
-                console.log(this.query);
                 Http.get('products/search?q=' + this.query).then(response => {
                     if (response.status === 200) {
-                        console.log('222');
+                        this.products = response.data.data.products;
                     }
                 });
             }

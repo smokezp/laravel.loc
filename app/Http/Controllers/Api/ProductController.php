@@ -22,7 +22,7 @@ class ProductController extends ApiController
         $array = $request->all();
         $array['user_id'] = $user_id;
         $product = Product::create($array);
-        $this->es_put($product);
+        $this->esPut($product);
 
         return $this->success(compact('product'), 'Yor product has been returned');
     }
@@ -31,7 +31,7 @@ class ProductController extends ApiController
     {
         $product = Product::find($id);
         $product->update($request->all());
-        $this->es_put($product);
+        $this->esPut($product);
 
         return $this->success(compact('product'), 'Your product has been updated');
     }
@@ -53,30 +53,44 @@ class ProductController extends ApiController
 
     public function search(Request $request)
     {
-//        dd($request->q);
         $client = ClientBuilder::create()->build();
         $params = [
             'index' => env('DB_DATABASE'),
             'type' => $this->type,
             'body' => [
                 'query' => [
-                    'multi_match' => [
-                        'fields' => [
-                            'name',
-                            'size'
-                        ],
-//                        'query' => '*' . $request->q . '*'
-                        'query' => 'ggf'
+                    'bool' => [
+                        'should' => [
+                            ['regexp' => ['name' => '.*' . $request->q . '.*']],
+                            ['regexp' => ['size' => '.*' . $request->q . '.*']],
+                        ]
                     ]
                 ]
             ]
         ];
+
         $r = $client->search($params);
-        dd($r);
-//        return
+        $products = $this->compactSearchResult($r);
+
+        return $this->success($products, 'Products are returned by your search');
     }
 
-    private function es_put($product)
+    private function compactSearchResult($r)
+    {
+        $es_products = $r['hits']['hits'];
+        $products = [];
+        if (!empty($es_products)) {
+            foreach ($es_products as $es_product)
+            {
+                $arr = $es_product['_source'];
+                $arr['id'] = $es_product['_id'];
+                $products[] = $arr;
+            }
+        }
+        return compact('products');
+    }
+
+    private function esPut($product)
     {
         $arr = $product->toArray();
         unset($arr['id']);
