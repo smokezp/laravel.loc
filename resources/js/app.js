@@ -25,3 +25,5 @@ const app = new Vue({
     components: { App, Product, Login},
     router,
 });
+
+window.rootVue = app;

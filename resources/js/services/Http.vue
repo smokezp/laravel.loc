@@ -11,11 +11,13 @@
 
             axios({url: '/api/' + url, data: data, method: method,  headers: {
                     'Authorization': 'Bearer ' + User.getToken(),
-                },})
+                }})
                 .then(resp => {
                     resolve(resp)
                 })
                 .catch(err => {
+                    let array = ['token_invalid', 'token_expired'];
+                    if (array.includes(err.response.data.error)) window.rootVue.$emit('logouted');
                     reject(err)
                 });
         });

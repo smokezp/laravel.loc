@@ -60,10 +60,15 @@
                 this.logged = logged;
                 this.user = User.getUser();
             })
+
+            this.$root.$on('logouted', () => {
+                this.logout();
+                this.showLoginModal = true;
+            })
         },
         methods: {
             logout() {
-                localStorage.removeItem('user');
+                User.removeUserData();
                 this.logged = false;
                 this.user = null;
             },

@@ -14,6 +14,10 @@
         },
         getToken() {
             return JSON.parse(localStorage.getItem('token'));
+        },
+        removeUserData() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
         }
     }
 </script>
