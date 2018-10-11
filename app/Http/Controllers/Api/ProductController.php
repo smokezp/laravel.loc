@@ -90,6 +90,32 @@ class ProductController extends ApiController
         return compact('products');
     }
 
+
+//    private function setMapping()
+//    {
+//        $params = [
+//            'index' => 'sweden_postal_codes',
+//            'body' => [
+//                'mappings' => [
+//                    'codes' => [
+//                        'properties' => [
+//                            'location' => [
+//                                'type' => 'geo_point'
+//                            ],
+//                            'city' => [
+//                                'type' => 'string'
+//                            ]
+//                        ]
+//                    ]
+//                ]
+//            ]
+//
+//        ];
+//
+//        $client = ClientBuilder::create()->build();
+//        $response = $client->indices()->create($params);
+//    }
+
     private function esPut($product)
     {
         $arr = $product->toArray();
