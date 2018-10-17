@@ -70,7 +70,6 @@
 </template>
 
 <script>
-    import User from '../services/User';
     import Http from '../services/Http';
 
     export default {
