@@ -1,5 +1,5 @@
 <template>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center" v-show="get_data">
         <div class="col-md-8">
             <div class="card" v-if="newState === 'table'">
                 <div class="card-header">All products
@@ -77,6 +77,7 @@
         data: () => {
             return {
                 products: null,
+                get_data: false,
                 newState: 'table',
                 oldState: 'table',
                 editableProduct: null,
@@ -90,6 +91,7 @@
                 .then(response => {
                     if (response.status === 200) {
                         this.products = response.data.data.products;
+                        this.get_data = true;
                     }
                 });
         },
