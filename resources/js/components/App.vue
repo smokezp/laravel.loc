@@ -42,6 +42,7 @@
     import Login from "./Login";
     import Register from "./Register";
     import User from '../services/User';
+    import Http from '../services/Http';
 
     export default {
         data: () => {
@@ -68,6 +69,7 @@
         },
         methods: {
             logout() {
+                Http.post('logout');
                 User.removeUserData();
                 this.logged = false;
                 this.user = null;

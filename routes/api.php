@@ -26,4 +26,5 @@ Route::group(['middleware' => 'jwt.auth'], function () {
     Route::put('/products/{id}', 'Api\ProductController@update');
     Route::post('/products', 'Api\ProductController@store');
     Route::delete('/products/{id}', 'Api\ProductController@destroy');
+    Route::post('/logout','Api\UserController@logout');
 });

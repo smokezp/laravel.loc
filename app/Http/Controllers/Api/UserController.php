@@ -46,6 +46,11 @@ class UserController extends ApiController
         }
     }
 
+    public function logout() {
+        JWTAuth::invalidate(JWTAuth::getToken());
+        return $this->success('', 'You are logouted');
+    }
+
     private function attempt($email, $password)
     {
         return JWTAuth::attempt(['email' => $email, 'password' => $password]);
