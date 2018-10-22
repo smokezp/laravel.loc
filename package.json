@@ -11,14 +11,26 @@
   },
   "devDependencies": {
     "axios": "^0.18.0",
+    "babel-core": "^6.26.3",
+    "babel-loader": "^7.0.0",
+    "babel-preset-env": "^1.7.0",
     "bootstrap": "^4.0.0",
     "cross-env": "^5.1",
+    "jasmine": "^2.99.0",
+    "jasmine-core": "^2.99.0",
     "jquery": "^3.2",
+    "karma": "^3.0.0",
+    "karma-coverage": "^1.1.2",
+    "karma-jasmine": "^1.1.2",
+    "karma-phantomjs-launcher": "^1.0.4",
+    "karma-webpack": "^3.0.5",
     "laravel-mix": "^2.0",
     "lodash": "^4.17.5",
     "popper.js": "^1.12",
     "vue": "^2.5.7",
     "vue-click-outside": "^1.0.7",
-    "vue-router": "^3.0.1"
+    "vue-loader": "^15.4.2",
+    "vue-router": "^3.0.1",
+    "webpack": "^4.22.0"
   }
 }
