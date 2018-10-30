@@ -90,7 +90,7 @@
             Http.get('products')
                 .then(response => {
                     if (response.status === 200) {
-                        this.products = response.data.data.products;
+                        this.products = response.data.products;
                         this.get_data = true;
                     }
                 });
@@ -126,7 +126,7 @@
                     size: this.size
                 }).then(response => {
                     if (response.status === 200) {
-                        this.products[this.findKeyById(id)] = response.data.data.product;
+                        this.products[this.findKeyById(id)] = response.data.product;
                         this.newState = 'table';
                     }
                 });
@@ -140,7 +140,7 @@
                     size: this.size
                 }).then(response => {
                     if (response.status === 200) {
-                        this.products.push(response.data.data.product);
+                        this.products.push(response.data.product);
                         this.newState = 'table';
                     }
                 });
@@ -151,7 +151,7 @@
             getProducts() {
                 Http.get('products/search?q=' + this.query).then(response => {
                     if (response.status === 200) {
-                        this.products = response.data.data.products;
+                        this.products = response.data.products;
                     }
                 });
             }

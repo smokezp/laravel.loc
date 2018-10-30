@@ -19,9 +19,9 @@ class UserController extends ApiController
 
         if ($token = $this->attempt($request->email, $request->password)) {
             $user = User::where('email', $request->email)->first()->toArray();
-            return $this->success(compact('user', 'token'), 'You are logined');
+            return $this->success(compact('user', 'token'));
         } else {
-            return $this->error('', 'You are not logined');
+            return $this->error();
         }
     }
 
@@ -36,7 +36,7 @@ class UserController extends ApiController
 
         $is_exist_user = User::where('email', $request->email)->first();
         if ($is_exist_user) {
-            return $this->error('', 'This email already exist');
+            return $this->error();
         } else {
             $password = $array['password'];
             $array['password'] = bcrypt($password);
@@ -48,7 +48,7 @@ class UserController extends ApiController
 
     public function logout() {
         JWTAuth::invalidate(JWTAuth::getToken());
-        return $this->success('', 'You are logouted');
+        return $this->success();
     }
 
     private function attempt($email, $password)

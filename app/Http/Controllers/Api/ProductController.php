@@ -10,12 +10,11 @@ class ProductController extends ApiController
 {
     private $type = 'products';
 
-//    TODO: move messages to lang file
     public function index()
     {
         $products = Product::all();
         $products = $products->toArray();
-        return $this->success(compact('products'), 'Your products has been returned');
+        return $this->success(compact('products'));
     }
 
     public function store(Request $request)
@@ -25,7 +24,7 @@ class ProductController extends ApiController
         $product = Product::create($array);
         $this->esPut($product);
 
-        return $this->success(compact('product'), 'Yor product has been returned');
+        return $this->success(compact('product'));
     }
 
     public function update(Request $request, $id)
@@ -34,7 +33,7 @@ class ProductController extends ApiController
         $product->update($request->all());
         $this->esPut($product);
 
-        return $this->success(compact('product'), 'Your product has been updated');
+        return $this->success(compact('product'));
     }
 
     public function destroy($id)
@@ -49,7 +48,7 @@ class ProductController extends ApiController
         $client = ClientBuilder::create()->build();
         $client->delete($params);
 
-        return $this->success('', 'Your product has been deleted');
+        return $this->success();
     }
 
     public function search(Request $request)
@@ -73,7 +72,7 @@ class ProductController extends ApiController
         $r = $client->search($params);
         $products = $this->compactSearchResult($r);
 
-        return $this->success($products, 'Products are returned by your search');
+        return $this->success($products);
     }
 
     private function compactSearchResult($r)

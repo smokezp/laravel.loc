@@ -105,7 +105,7 @@
                 }).then(response => {
                     let logged;
                     if (response.status === 200) {
-                        User.setUserData(response.data.data.user, response.data.data.token);
+                        User.setUserData(response.data.user, response.data.token);
                         this.$emit('close');
                         logged = true;
                     } else {

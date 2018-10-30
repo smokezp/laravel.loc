@@ -6,23 +6,18 @@ namespace App\Http\Controllers\Api;
 
 class ApiController
 {
-    public function success($data, $msg)
+    public function success($data = [])
     {
-        return $this->compact(200, $data, $msg);
+        return $this->compact(200, $data);
     }
 
-    public function error($data, $msg)
+    public function error($data = [])
     {
-        return $this->compact(400, $data, $msg);
+        return $this->compact(400, $data);
     }
 
-    private function compact($code, $data, $msg)
+    private function compact($code, $data)
     {
-        if (!$data) $data = [];
-
-        return response()->json([
-            'data' => $data,
-            'message' => $msg
-        ], $code);
+        return response()->json($data, $code);
     }
 }
