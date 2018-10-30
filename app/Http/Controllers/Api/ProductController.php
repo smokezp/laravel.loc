@@ -10,6 +10,7 @@ class ProductController extends ApiController
 {
     private $type = 'products';
 
+//    TODO: move messages to lang file
     public function index()
     {
         $products = Product::all();
