@@ -95,10 +95,9 @@
                             email: this.email,
                         }).then(response => {
                             if (response.status === 200) {
-
+                                this.state = this.verify;
+                                this.message = 'Verify token';
                             }
-                            this.state = this.verify;
-                            this.message = 'Verify token';
                         });
                         break;
                     case this.verify:
@@ -106,10 +105,9 @@
                             token: this.token,
                         }).then(response => {
                             if (response.status === 200) {
-
+                                this.state = this.reset;
+                                this.message = 'Reset password';
                             }
-                            this.state = this.reset;
-                            this.message = 'Reset password';
                         });
                         break;
                     case this.reset:
@@ -119,10 +117,9 @@
                             password_confirmation: this.password_confirmation,
                         }).then(response => {
                             if (response.status === 200) {
-
+                                this.message = defaultMessage;
+                                this.state = this.reset;
                             }
-                            this.message = defaultMessage;
-                            this.state = this.reset;
                         });
                         break;
                 }
