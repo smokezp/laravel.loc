@@ -29,9 +29,6 @@ class ForgotPasswordController extends ApiController
             'token' => $token
         ]);
 
-
-        return $this->success();
-/*
         Mail::to($email)->send(new PasswordReset($token));
         $sent = (!Mail::failures());
         if ($sent) {
@@ -39,8 +36,6 @@ class ForgotPasswordController extends ApiController
         } else {
             return $this->error();
         }
-        */
-
     }
 
     public function verifyToken(Request $request)
