@@ -16,10 +16,10 @@
                         </li>
 
                         <li class="nav-item">
-                            <button @click="showLoginModal = true" v-if="!logged" class="float-right">Login</button>
+                            <button @click="showModal = login" v-if="!logged" class="float-right">Login</button>
                         </li>
                         <li class="nav-item">
-                            <button @click="showRegisterModal = true" v-if="!logged" class="float-right">Register</button>
+                            <button @click="showModal = register" v-if="!logged" class="float-right">Register</button>
                         </li>
                         <li class="nav-item">
                             <button @click="logout" v-if="logged" class="float-right">Logout</button>
@@ -32,8 +32,9 @@
         <div class="container" v-if="logged">
             <router-view></router-view>
         </div>
-        <login v-if="showLoginModal" @close="showLoginModal = false"></login>
-        <register v-if="showRegisterModal" @close="showRegisterModal = false"></register>
+        <login v-if="showModal === login" @close="hideModal"></login>
+        <register v-if="showModal === register" @close="hideModal"></register>
+        <forgot-password v-if="showModal === password" @close="hideModal"></forgot-password>
     </div>
 
 </template>
@@ -41,6 +42,7 @@
 <script>
     import Login from "./Login";
     import Register from "./Register";
+    import ForgotPassword from "./ForgotPassword";
     import User from '../services/User';
     import Http from '../services/Http';
 
@@ -48,24 +50,35 @@
         data: () => {
             let user = User.getUser();
             return {
-                showLoginModal: false,
-                showRegisterModal: false,
+                login: 'login',
+                register: 'register',
+                password: 'password',
+                showModal: null,
                 user: user,
                 logged: user === null ? false : true
             }
         },
         name: "App",
-        components: {Register, Login},
+        components: {
+            Register,
+            Login,
+            ForgotPassword
+        },
         created() {
             this.$root.$on('logged', (logged) => {
                 this.logged = logged;
                 this.user = User.getUser();
-            })
+            });
 
             this.$root.$on('logouted', () => {
                 this.logout();
-                this.showLoginModal = true;
-            })
+                this.showModal = this.login;
+            });
+
+            this.$root.$on('show-modal', (modal) => {
+                this.showModal = modal;
+            });
+
         },
         methods: {
             logout() {
@@ -73,6 +86,9 @@
                 User.removeUserData();
                 this.logged = false;
                 this.user = null;
+            },
+            hideModal() {
+                this.showModal = null;
             },
             showAuthPanel() {
                 let authPanel = $('.navbar-collapse');

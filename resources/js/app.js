@@ -7,7 +7,6 @@ Vue.use(VueRouter);
 
 import App from './components/App'
 import Product from './components/Product'
-import Login from './components/Login'
 
 const router = new VueRouter({
     mode: 'history',
@@ -22,7 +21,7 @@ const router = new VueRouter({
 
 const app = new Vue({
     el: '#app',
-    components: { App, Product, Login},
+    components: {App},
     router,
 });
 

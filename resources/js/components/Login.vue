@@ -14,7 +14,7 @@
                     <div class="modal-body">
                         <slot name="body">
                             <div class="row justify-content-center">
-                                <div class="card">
+                                <div class="card w-100">
                                     <div class="card-body">
 
                                         <div class="form-group row">
@@ -41,6 +41,9 @@
                                                 <button type="submit" class="btn btn-primary" @click="submit">
                                                     Login
                                                 </button>
+                                                <a class="btn btn-link" href="" @click="showPasswordModal">
+                                                    Forgot Your Password?
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
@@ -71,6 +74,10 @@
             close(event) {
                 event.preventDefault();
                 this.$emit('close');
+            },
+            showPasswordModal() {
+                event.preventDefault();
+                this.$root.$emit('show-modal', 'password');
             },
             submit() {
                 Http.post('login', {

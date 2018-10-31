@@ -20,6 +20,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/login','Api\UserController@login');
 Route::post('/register','Api\UserController@register');
 
+Route::post('password/email', 'Api\ForgotPasswordController@sendResetLinkEmail');
+Route::post('password/token', 'Api\ForgotPasswordController@verifyToken');
+Route::post('password/reset', 'Api\ForgotPasswordController@reset');
+
+
 Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/products', 'Api\ProductController@index');
     Route::get('/products/search', 'Api\ProductController@search');
