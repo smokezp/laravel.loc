@@ -27,7 +27,7 @@ Route::post('password/reset', 'Api\ForgotPasswordController@reset');
 
 Route::group(['middleware' => 'jwt.auth'], function () {
     Route::get('/products', 'Api\ProductController@index');
-    Route::get('/products/search', 'Api\ProductController@search');
+//    Route::get('/products/search', 'Api\ProductController@search');
     Route::put('/products/{id}', 'Api\ProductController@update');
     Route::post('/products', 'Api\ProductController@store');
     Route::delete('/products/{id}', 'Api\ProductController@destroy');

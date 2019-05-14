@@ -18,7 +18,7 @@ class UserController extends ApiController
         ])->validate();
 
         if ($token = $this->attempt($request->email, $request->password)) {
-            $user = User::where('email', $request->email)->first()->toArray();
+            $user = User::where('email', $request->email)->first();
             return $this->success(compact('user', 'token'));
         } else {
             return $this->error();

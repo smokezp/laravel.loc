@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Product;
 use Illuminate\Http\Request;
-use Elasticsearch\ClientBuilder;
+//use Elasticsearch\ClientBuilder;
 
 class ProductController extends ApiController
 {
@@ -22,7 +22,7 @@ class ProductController extends ApiController
         $array = $request->all();
         $array['user_id'] = auth()->id();
         $product = Product::create($array);
-        $this->esPut($product);
+//        $this->esPut($product);
 
         return $this->success(compact('product'));
     }
@@ -31,7 +31,7 @@ class ProductController extends ApiController
     {
         $product = Product::find($id);
         $product->update($request->all());
-        $this->esPut($product);
+//        $this->esPut($product);
 
         return $this->success(compact('product'));
     }
@@ -39,18 +39,18 @@ class ProductController extends ApiController
     public function destroy($id)
     {
         Product::find($id)->delete();
-        $params = [
-            'index' => env('DB_DATABASE'),
-            'type' => $this->type,
-            'id' => $id
-        ];
-
-        $client = ClientBuilder::create()->build();
-        $client->delete($params);
+//        $params = [
+//            'index' => env('DB_DATABASE'),
+//            'type' => $this->type,
+//            'id' => $id
+//        ];
+//
+//        $client = ClientBuilder::create()->build();
+//        $client->delete($params);
 
         return $this->success();
     }
-
+/*
     public function search(Request $request)
     {
         $client = ClientBuilder::create()->build();
@@ -130,5 +130,5 @@ class ProductController extends ApiController
 
         $client = ClientBuilder::create()->build();
         $client->index($params);
-    }
+    }*/
 }
